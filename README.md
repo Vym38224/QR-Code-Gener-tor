@@ -1,1 +1,1 @@
-# QR-Code-Gener-tor
+# QR-Code-Generator
