@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import filedialog, colorchooser
 import pyqrcode
 from PIL import Image, ImageTk
+import cv2
 
 class QRCodeGenerator:
     def __init__(self, root):
@@ -42,10 +43,9 @@ class QRCodeGenerator:
         
         Button(self.window, text='Upload & Decode', bg='light blue', command=self.upload_and_decode).pack()
         self.decoded_label = Label(self.window, text='', font='arial 12')
-        self.decoded_label.pack()
+        self.decoded_label.pack(pady=10)
 
 
-    
     def select_qr_color(self):
         color_code = colorchooser.askcolor(title="Choose QR Code Color")
         if color_code:
@@ -90,8 +90,10 @@ class QRCodeGenerator:
         logo_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
         if logo_path:
             logo = Image.open(logo_path)
-            logo_size = size//2  
+            logo_size = size // 4  
             logo = logo.resize((logo_size, logo_size), Image.LANCZOS)
+            if logo.mode != 'RGBA':
+                logo = logo.convert('RGBA')
             logo_position = ((size - logo_size) // 2, (size - logo_size) // 2)
             img.paste(logo, logo_position, logo)
         
@@ -126,6 +128,7 @@ class QRCodeGenerator:
                 self.decoded_label.config(text=f'Decoded Data: {data}')
             else:
                 self.decoded_label.config(text='No QR code found or unable to decode.')
+
 
 if __name__ == "__main__":
     root = Tk()
